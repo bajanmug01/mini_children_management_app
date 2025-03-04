@@ -1,8 +1,10 @@
 'use client';
 
+import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 
 interface ChildProps {
+    id: string;
     firstName: string;
     middleName?: string;
     lastName: string;
@@ -10,10 +12,10 @@ interface ChildProps {
     gender: string;
 }
 
-export function ChildListItem({ firstName, middleName, lastName, age, gender }: ChildProps) {
+export function ChildListItem({ id, firstName, middleName, lastName, age, gender }: ChildProps) {
     return (
         <li>
-            <a href="#" className="grid grid-cols-3 items-center gap-x-6 p-5 hover:bg-gray-100 transition">
+            <Link href={`/child/${id}`} className="grid grid-cols-3 items-center gap-x-6 p-5 hover:bg-gray-100 transition">
                 <div className="flex min-w-0 gap-x-4">
                     <div className="flex gap-4 w-64 truncate">
                         <p className="text-sm font-semibold text-gray-900">{firstName}</p>
@@ -28,7 +30,7 @@ export function ChildListItem({ firstName, middleName, lastName, age, gender }: 
                 </div>
 
                 <ChevronRightIcon className="w-6 h-6 text-gray-400 justify-self-end" />
-            </a>
+            </Link>
         </li>
     );
 }

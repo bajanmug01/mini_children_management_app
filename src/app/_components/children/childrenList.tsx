@@ -5,9 +5,9 @@ import { ChildListItem } from "./childListItem";
 import { Button } from "LA/components/ui/button";
 
 const childrenData = [
-    { firstName: "Leslie", middleName: "Marie", lastName: "Alexander", age: 5, gender: "Female" },
-    { firstName: "Michael", lastName: "Schmidt", age: 4, gender: "Male" },
-    { firstName: "Anna", middleName: "Sophia", lastName: "Müller", age: 6, gender: "Female" },
+    { id: "1", firstName: "Leslie", middleName: "Marie", lastName: "Alexander", age: 5, gender: "Female" },
+    { id: "2", firstName: "Michael", lastName: "Schmidt", age: 4, gender: "Male" },
+    { id: "3", firstName: "Anna", middleName: "Sophia", lastName: "Müller", age: 6, gender: "Female" },
 ];
 
 export default function ChildrenList() {
