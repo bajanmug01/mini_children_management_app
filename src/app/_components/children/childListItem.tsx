@@ -6,13 +6,28 @@ import { ChevronRightIcon } from "@heroicons/react/24/solid";
 interface ChildProps {
     id: string;
     firstName: string;
-    middleName?: string;
+    middleName: string | null;
     lastName: string;
-    age: number;
+    dateOfBirth: Date;
     gender: string;
 }
 
-export function ChildListItem({ id, firstName, middleName, lastName, age, gender }: ChildProps) {
+const calculateAge = (dateOfBirth: Date): number => {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+};
+
+export function ChildListItem({ id, firstName, middleName, lastName, dateOfBirth, gender }: ChildProps) {
+    const age = calculateAge(dateOfBirth);
+
     return (
         <li>
             <Link href={`/child/${id}`} className="grid grid-cols-3 items-center gap-x-6 p-5 hover:bg-gray-100 transition">

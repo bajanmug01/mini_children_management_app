@@ -1,37 +1,39 @@
 'use client';
 
-import Link from "next/link";
 import { ChildListItem } from "./childListItem";
-import { Button } from "LA/components/ui/button";
-
-const childrenData = [
-    { id: "1", firstName: "Leslie", middleName: "Marie", lastName: "Alexander", age: 5, gender: "Female" },
-    { id: "2", firstName: "Michael", lastName: "Schmidt", age: 4, gender: "Male" },
-    { id: "3", firstName: "Anna", middleName: "Sophia", lastName: "Müller", age: 6, gender: "Female" },
-];
+import { LoadingSpinner } from "../loadingSpinner";
+import { api } from "LA/trpc/react";
 
 export default function ChildrenList() {
-    return (
-        <div>
-            <div className="mb-6 flex items-center justify-between">
-                <div>
-                    <h2 className="text-xl font-bold text-gray-900">Kindergarten Children</h2>
-                    <p className="text-sm text-gray-500">
-                        Here you can find a list of all kindergarten children along with their personal details.
-                    </p>
-                </div>
-                <Link href="/add-child">
-                    <Button variant="default">+ Add Child</Button>
-                </Link>
-            </div>
 
-            <div className="shadow-md rounded-lg overflow-hidden">
-                <ul role="list" className="divide-y divide-gray-200">
-                    {childrenData.map((child, index) => (
-                        <ChildListItem key={index} {...child} />
-                    ))}
-                </ul>
+    const { data, isLoading } = api.child.getAll.useQuery();
+
+    if (isLoading) return <LoadingSpinner />
+
+    if (!data) return <div>something went wrong!</div>
+
+    if (data.length === 0) {
+        return (
+            <div className="text-center text-gray-500 font-semibold py-6">
+                No data found in the database!
             </div>
+        );
+    }
+
+    return (
+        <div className="shadow-md rounded-lg overflow-hidden">
+            <ul role="list" className="divide-y divide-gray-200">
+                <li className="grid grid-cols-3 font-semibold bg-gray-100 text-gray-700 p-5 border-b border-gray-300">
+                    <span className="text-left px-6">Name</span>
+                    <span className="text-center">Age</span>
+                    <span className="text-right px-6">Gender</span>
+                </li>
+
+
+                {data.map((child, index) => (
+                    <ChildListItem key={index} {...child} />
+                ))}
+            </ul>
         </div>
     );
 }

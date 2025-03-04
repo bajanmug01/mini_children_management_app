@@ -4,6 +4,7 @@ import { createTRPCRouter, publicProcedure } from "LA/server/api/trpc";
 
 
 // example how to mutate or query the db
+/*
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
@@ -31,3 +32,4 @@ export const postRouter = createTRPCRouter({
     return post ?? null;
   }),
 });
+*/
