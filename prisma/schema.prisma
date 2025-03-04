@@ -10,11 +10,41 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+model Child {
+    id        String      @id @default(uuid())
+    firstName      String
+    middleName      String?
+    lastName        String
+    dateOfBirth DateTime
+    gender     String
+    notes      String?
+
+    guardians ChildGuardian[]
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([name])
+    @@index([lastName])
+}
+
+model ChildGuardian {
+    id        String      @id @default(uuid())
+    firstName      String
+    middleName      String?
+    lastName        String
+    email     String
+    phone     String?
+    
+    street    String
+    city      String   
+    zipCode   String   
+    country   String   
+
+    childId   String
+    child     Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([lastName])
 }
