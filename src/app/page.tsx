@@ -6,6 +6,8 @@ import { Button } from "LA/components/ui/button";
 
 export default function Home() {
 
+  {/* TODO add search children*/}
+
   return (
     <>
       <main className="max-w-7xl mx-auto px-4 py-6">

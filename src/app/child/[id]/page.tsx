@@ -14,6 +14,8 @@ import {
 } from "LA/components/ui/card";
 import { Input } from "LA/components/ui/input";
 import { Label } from "LA/components/ui/label";
+import { api } from "LA/trpc/react";
+import { useParams } from "next/navigation";
 
 // Data Interfaces
 interface Guardian {
@@ -35,7 +37,7 @@ interface Child {
     lastName: string;
     dateOfBirth: string;
     gender: string;
-    notes: string;
+    notes?: string | null;
     guardians: Guardian[];
 }
 
@@ -45,7 +47,7 @@ interface ChildFormData {
     lastName: string;
     dateOfBirth: string;
     gender: string;
-    notes: string;
+    notes?: string | null;
 }
 
 interface GuardianFormData {
@@ -445,44 +447,17 @@ function GuardianCard({ guardian, labelWidthClass }: GuardianCardProps) {
     );
 }
 
-// Main Page Component
 export default function ChildDetailsPage() {
-    // Mock child data including guardians
-    const child: Child = {
-        id: "1",
-        firstName: "Margot",
-        lastName: "Foster",
-        dateOfBirth: "2005-06-15T00:00:00.000Z",
-        gender: "Female",
-        notes:
-            "Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat.",
-        guardians: [
-            {
-                id: "g1",
-                firstName: "John",
-                middleName: "D.",
-                lastName: "Foster",
-                email: "john.foster@example.com",
-                phone: "123-456-7890",
-                street: "123 Main St",
-                city: "New York",
-                zipCode: "10001",
-                country: "USA",
-            },
-            {
-                id: "g2",
-                firstName: "Jane",
-                middleName: null,
-                lastName: "Foster",
-                email: "jane.foster@example.com",
-                phone: null,
-                street: "123 Main St",
-                city: "New York",
-                zipCode: "10001",
-                country: "USA",
-            },
-        ],
-    };
+
+    const params = useParams();
+    const { id } = params;
+
+    const { data, isLoading } = api.child.getById.useQuery(id as string);
+
+    console.log(data);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (!data) return <div>Child not found</div>;
 
     // Fixed label width for alignment
     const labelWidthClass = "w-40";
@@ -490,11 +465,11 @@ export default function ChildDetailsPage() {
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-6">
             {/* Render the ChildCard */}
-            <ChildCard child={child} labelWidthClass={labelWidthClass} />
+            <ChildCard child={data} labelWidthClass={labelWidthClass} />
 
             {/* Render GuardianCards */}
             <div className="space-y-4">
-                {child.guardians.map((guardian) => (
+                {data.guardians.map((guardian) => (
                     <GuardianCard key={guardian.id} guardian={guardian} labelWidthClass={labelWidthClass} />
                 ))}
             </div>
