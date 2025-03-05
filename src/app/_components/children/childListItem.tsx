@@ -38,12 +38,10 @@ export function ChildListItem({ id, firstName, middleName, lastName, dateOfBirth
                         <p className="text-sm font-semibold text-gray-900">{lastName}</p>
                     </div>
                 </div>
-
                 <div className="flex gap-8">
                     <p className="text-xs text-gray-500">{age} years old</p>
                     <p className="text-xs text-gray-500">{gender}</p>
                 </div>
-
                 <ChevronRightIcon className="w-6 h-6 text-gray-400 justify-self-end" />
             </Link>
         </li>

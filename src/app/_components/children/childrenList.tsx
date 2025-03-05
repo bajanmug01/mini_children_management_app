@@ -24,9 +24,13 @@ export default function ChildrenList() {
         <div className="shadow-md rounded-lg overflow-hidden">
             <ul role="list" className="divide-y divide-gray-200">
                 <li className="grid grid-cols-3 font-semibold bg-gray-100 text-gray-700 p-5 border-b border-gray-300">
-                    <span className="text-left px-6">Name</span>
-                    <span className="text-center">Age</span>
-                    <span className="text-right px-6">Gender</span>
+                    <div className="flex min-w-0 gap-x-4">
+                        <p className="flex gap-4 w-64 truncate">Name</p>
+                    </div>
+                    <div className="flex gap-16">
+                        <span>Age</span>
+                        <span>Gender</span>
+                    </div>
                 </li>
 
 
