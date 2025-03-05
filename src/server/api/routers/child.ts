@@ -96,6 +96,14 @@ export const childRouter = createTRPCRouter({
             });
             return updatedChild;
         }),
+
+    delete: publicProcedure
+        .input(z.object({ id: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            return await ctx.db.child.delete({
+                where: { id: input.id },
+            });
+        }),
 });
 
 

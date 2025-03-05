@@ -15,7 +15,7 @@ import {
 import { Input } from "LA/components/ui/input";
 import { Label } from "LA/components/ui/label";
 import { api } from "LA/trpc/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // Data Interfaces
 interface Guardian {
@@ -486,6 +486,7 @@ function GuardianCard({ guardian, labelWidthClass }: GuardianCardProps) {
 }
 
 export default function ChildDetailsPage() {
+    const router = useRouter();
 
     const params = useParams();
     const { id } = params;
@@ -502,14 +503,27 @@ export default function ChildDetailsPage() {
 
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-6">
-            {/* Render the ChildCard */}
-            <ChildCard child={data} labelWidthClass={labelWidthClass} />
+            <div className="mb-6 flex items-center justify-between">
+                <div>
+                    <h2 className="text-xl font-bold text-gray-900">Child Overview</h2>
+                    <p className="text-sm text-gray-500">
+                        Here you can see and edit the personal details.
+                    </p>
+                </div>
+                <Button variant="outline" type="button" onClick={() => router.push('/')}>
+                    back
+                </Button>
+            </div>
+            <div >
+                {/* Render the ChildCard */}
+                <ChildCard child={data} labelWidthClass={labelWidthClass} />
 
-            {/* Render GuardianCards */}
-            <div className="space-y-4">
-                {data.guardians.map((guardian) => (
-                    <GuardianCard key={guardian.id} guardian={guardian} labelWidthClass={labelWidthClass} />
-                ))}
+                {/* Render GuardianCards */}
+                <div className="space-y-4">
+                    {data.guardians.map((guardian) => (
+                        <GuardianCard key={guardian.id} guardian={guardian} labelWidthClass={labelWidthClass} />
+                    ))}
+                </div>
             </div>
         </div>
     );
