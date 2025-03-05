@@ -110,7 +110,6 @@ function ChildCard({ child, labelWidthClass }: ChildCardProps) {
                 data,
             });
             console.log("Updated child:", updatedChild);
-            // Optionally refresh your data or update local state here.
         } catch (error) {
             // TODO Error message for user shadcn component for errors
             console.error("Failed to update child", error);
@@ -267,18 +266,36 @@ function GuardianCard({ guardian, labelWidthClass }: GuardianCardProps) {
         },
     });
 
-    const onSubmit = (data: GuardianFormData) => {
-        console.log("Updated guardian:", data);
-        // Optionally update your data source/API here.
+    const utils = api.useContext();
+    const updateGuardianMutation = api.guardian.update.useMutation({
+        onSuccess: (updatedGuardian) => {
+            utils.child.getById.invalidate(updatedGuardian.childId);
+        },
+        onError: (e) => {
+            console.error("Failed to update guardian", e);
+        },
+    });
+
+    const onSubmit = async (data: GuardianFormData) => {
+        try {
+            const updatedGuardian = await updateGuardianMutation.mutateAsync({
+                id: guardian.id,
+                data,
+            });
+            console.log("Updated guardian:", updatedGuardian);
+        } catch (error) {
+            console.error("Error updating guardian:", error);
+        }
         setIsEditing(false);
     };
+
 
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between items-start">
                 <div className="flex flex-col items-start">
                     <CardTitle>
-                        Guardian: {guardian.firstName} {guardian.lastName}
+                        Guardian Information
                     </CardTitle>
                     <CardDescription>Contact and address details</CardDescription>
                 </div>
