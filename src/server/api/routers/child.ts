@@ -9,6 +9,7 @@ export const childRouter = createTRPCRouter({
         });
         return children;
     }),
+
     getById: publicProcedure
         .input(z.string())
         .query(async ({ ctx, input }) => {
@@ -21,4 +22,35 @@ export const childRouter = createTRPCRouter({
             }
             return { ...child, dateOfBirth: child.dateOfBirth.toISOString() };
         }),
+
+    update: publicProcedure
+        .input(
+            z.object({
+                id: z.string(),
+                data: z.object({
+                    firstName: z.string(),
+                    lastName: z.string(),
+                    // Expect the client to pass a date string in YYYY-MM-DD format.
+                    dateOfBirth: z.string(),
+                    gender: z.string(),
+                    notes: z.string().nullable().optional(),
+                }),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            const updatedChild = await ctx.db.child.update({
+                where: { id: input.id },
+                data: {
+                    firstName: input.data.firstName,
+                    lastName: input.data.lastName,
+                    // Convert the string to a Date.
+                    dateOfBirth: new Date(input.data.dateOfBirth),
+                    gender: input.data.gender,
+                    notes: input.data.notes,
+                },
+            });
+            return updatedChild;
+        }),
 });
+
+

@@ -91,9 +91,30 @@ function ChildCard({ child, labelWidthClass }: ChildCardProps) {
         },
     });
 
-    const onSubmit = (data: ChildFormData) => {
-        console.log("Updated child:", data);
-        // Optionally update your data source/API here.
+    const utils = api.useContext();
+    const updateChildMutation = api.child.update.useMutation({
+        onSuccess: () => {
+            utils.child.getById.invalidate(child.id);
+        },
+        onError: (e) => {
+            const errorMessage = e.data?.zodError?.fieldErrors.content;
+            console.log(errorMessage);
+            //if (errorMessage && errorMessage[0]) { toast.error(errorMessage[0]) } else {toast.error("Try again lagter.")}
+        }
+    });
+
+    const onSubmit = async (data: ChildFormData) => {
+        try {
+            const updatedChild = await updateChildMutation.mutateAsync({
+                id: child.id,
+                data,
+            });
+            console.log("Updated child:", updatedChild);
+            // Optionally refresh your data or update local state here.
+        } catch (error) {
+            // TODO Error message for user shadcn component for errors
+            console.error("Failed to update child", error);
+        }
         setIsEditing(false);
     };
 
